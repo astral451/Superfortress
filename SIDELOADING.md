@@ -14,10 +14,29 @@ natively.
 pip install --user buildozer cython
 sudo apt install -y git zip unzip openjdk-17-jdk python3-pip \
     autoconf libtool pkg-config zlib1g-dev libncurses5-dev \
-    libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+    libncursesw5-dev cmake libffi-dev libssl-dev
 
 cd Superfortress
 buildozer android debug
+```
+
+### `libtinfo5` not found (WSL / Ubuntu 22.04+)
+
+`libtinfo5` was dropped from Ubuntu's repos starting with 22.04, so it's
+left out of the `apt install` line above. It's only needed for some of
+the older 32-bit Android SDK command-line tools (e.g. `aapt`), so it
+only bites during the `buildozer android debug` step itself, not before.
+If the build complains about a missing `libtinfo.so.5`, fix it with
+either of these before re-running `buildozer android debug`:
+
+```bash
+# Option A: symlink to libtinfo6 (usually enough)
+sudo apt install -y libtinfo6
+sudo ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
+
+# Option B: install the real libtinfo5 package directly
+wget http://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.2-0ubuntu2_amd64.deb
+sudo dpkg -i libtinfo5_6.2-0ubuntu2_amd64.deb
 ```
 
 The first run downloads the Android SDK/NDK (multiple GB) and will take a
