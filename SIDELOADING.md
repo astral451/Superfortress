@@ -10,15 +10,26 @@ This has to happen on a Linux machine (or WSL on Windows) — `buildozer`
 downloads and drives the Android SDK/NDK and doesn't run on macOS/Windows
 natively.
 
+On recent Ubuntu/WSL (23.04+/24.04), `pip install` at the system level is
+blocked by default ("externally-managed-environment"). Use a virtual
+environment to keep the build tooling isolated:
+
 ```bash
-pip install --user buildozer cython
-sudo apt install -y git zip unzip openjdk-17-jdk python3-pip \
+sudo apt install -y git zip unzip openjdk-17-jdk python3-pip python3-venv \
     autoconf libtool pkg-config zlib1g-dev libncurses5-dev \
     libncursesw5-dev cmake libffi-dev libssl-dev
+
+python3 -m venv ~/buildozer-venv
+source ~/buildozer-venv/bin/activate
+pip install --upgrade pip
+pip install buildozer cython
 
 cd Superfortress
 buildozer android debug
 ```
+
+Any time you come back to build later, re-activate the venv first:
+`source ~/buildozer-venv/bin/activate`.
 
 ### `libtinfo5` not found (WSL / Ubuntu 22.04+)
 
