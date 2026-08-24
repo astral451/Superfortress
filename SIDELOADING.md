@@ -71,27 +71,42 @@ Plug the Supernote into your computer via USB-C. It should mount as a
 storage device (MTP). Copy the APK into a folder you can find later, e.g.
 `Document/` or a new `Sideload/` folder.
 
-## 3. Allow installing from unknown sources
+## 3. Install the APK via ADB
 
-Android blocks installing APKs from outside the Play Store by default.
-On the Supernote:
+**Confirmed on a real A5X: tapping the APK in Supernote's built-in file
+manager fails with "Unsupported file format."** The stock file manager
+doesn't associate `.apk` with the package installer at all — this isn't
+a bad transfer or a broken build, it just doesn't know what to do with
+the file. Installing over ADB sidesteps the file manager entirely and is
+the reliable path.
 
-1. Settings → About → tap the firmware/version number ~7 times to unlock
-   Developer Options (standard Android trick — Supernote inherits this).
-2. Find whichever file manager app you'll use to open the APK (Supernote's
-   built-in Files app, or another) and enable "Install unknown apps" /
-   "Allow from this source" for it.
+1. Download Android Platform Tools (adb) for your OS:
+   https://developer.android.com/tools/releases/platform-tools — extract
+   it somewhere handy, e.g. `C:\platform-tools` on Windows.
+2. On the Supernote: Settings → About → tap the firmware/version number
+   ~7 times to unlock Developer Options (standard Android trick —
+   Supernote inherits this), then open Developer Options and enable
+   **USB debugging**.
+3. Plug the Supernote into your computer via USB-C. It should prompt on
+   the Supernote screen to allow the connection (an RSA key fingerprint
+   prompt) — tap **Allow**.
+4. From a terminal in the `platform-tools` folder, confirm the device is
+   visible and authorized:
+   ```
+   adb devices
+   ```
+   It should list a device ID, not `unauthorized` (if it says
+   `unauthorized`, check the Supernote screen for the allow prompt).
+5. Install directly — no need to copy the APK onto the device at all:
+   ```
+   adb install path/to/superfortress-0.1.0-arm64-v8a-debug.apk
+   ```
 
-Exact menu wording varies by firmware version — if these labels don't
-match what you see, search Supernote's support site or community wiki for
-your specific firmware build; the underlying Android mechanism is the
+Superfortress should now appear in the Supernote's app drawer.
+
+Exact Developer Options menu wording can vary by firmware version — if
+labels don't match what you see, the underlying Android mechanism is the
 same, just the settings screen may be reorganized.
-
-## 4. Install and launch
-
-Open the Files app on the Supernote, navigate to the APK you copied over,
-and tap it. Confirm the install prompt. Superfortress should then appear
-in the app drawer like any other sideloaded app.
 
 ## What to expect on first launch
 
