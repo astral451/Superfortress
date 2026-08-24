@@ -31,6 +31,18 @@ You should see a grid map with a white dot (the worker) wandering to the
 nearest tree, harvesting it, and the wood counter in the top bar
 increasing every ~1.5 seconds. Pause/Resume toggles the simulation.
 
+## Building the APK (WSL)
+
+The Android build tooling (`buildozer`/`cython`) lives in a Python venv
+inside WSL, set up per `SIDELOADING.md`. To get back to it in a new WSL
+terminal session:
+
+```bash
+source ~/buildozer-venv/bin/activate
+cd Superfortress
+buildozer android debug
+```
+
 ## Next steps
 
 - Build the APK and confirm it installs/launches on the actual A5X
